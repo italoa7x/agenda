@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import br.com.agenda.model.Agenda;
 import br.com.agenda.model.Contato;
+import br.com.agenda.util.EmailValidador;
 import br.com.agenda.util.StringToDataNascimento;
 
 public class AgendaMain {
@@ -20,29 +21,45 @@ public class AgendaMain {
 		try {
 			while (continua) {
 				System.out.println("1 Cadastrar contato\n2 Consultar\n3 Alterar\n4 Excluir"
-						+ "\n5 Exibir aniversariantes do mês\n6 Exibir contatos\n7 Fechar agenda\n");
+						+ "\n5 Exibir aniversariantes do mês\n6 Exibir contatos\n7 Excluir todos os contatos\n8 Fechar Agenda");
 
 				int opcao = Integer.parseInt(leitor.nextLine());
 
 				switch (opcao) {
 				case 1:
-					System.out.println("digite o nome do contato: ");
-					String nome = leitor.nextLine();
-					System.out.println("digite o telefone: ");
-					String telefone = leitor.nextLine();
-					System.out.println("digite a data de nascimento (dia/mes/ano): ");
-					String dataNascimento = leitor.nextLine();
+					while (true) {
+						System.out.println("digite o nome do contato: ");
+						String nome = leitor.nextLine();
+						System.out.println("digite o telefone: ");
+						String telefone = leitor.nextLine();
 
-					// se o usuario passar um padrao invalido irá dar erro
-					if (!dataNascimento.contains("/")) {
-						System.out.println("digite uma data válida");
+						System.out.println("digite o contato comercial: ");
+						String contatoComercial = leitor.nextLine();
+
+						System.out.println("digite a data de nascimento (dia/mes/ano): ");
+						String dataNascimento = leitor.nextLine();
+
+						System.out.println("digite seu e-mail: ");
+						String email = leitor.nextLine();
+						// se o usuario passar um padrao invalido irá dar erro
+						if (!dataNascimento.contains("/")) {
+							System.out.println("digite uma data válida");
+						}
+
+						if (!EmailValidador.validar(email)) {
+							System.out.println("Erro! E-mail inválido");
+						} else {
+							contato = new Contato(nome, telefone, contatoComercial, email,
+									StringToDataNascimento.converter(dataNascimento));
+							// salva o novo contato
+							agenda.cadastrarNovoContato(contato);
+							System.out.println("---------------------");
+							break;
+
+						}
 					}
-
-					contato = new Contato(nome, telefone, StringToDataNascimento.converter(dataNascimento));
-					// salva o novo contato
-					agenda.cadastrarNovoContato(contato);
-					System.out.println("---------------------");
 					break;
+
 				case 2:
 					System.out.println("digite o contato que deseja verificar");
 					String contatoPraBuscar = leitor.nextLine();
@@ -59,18 +76,34 @@ public class AgendaMain {
 					System.out.println("digite o novo contato: ");
 					String novoTelefone = leitor.nextLine();
 
+					System.out.println("novo contato comercial: ");
+					String novoContatoComercial = leitor.nextLine();
+
+					System.out.println("digite o novo e-mail: ");
+					String novoEmail = leitor.nextLine();
+
 					// passa os novos dados
 					contato = new Contato();
 					contato.setNome(novoNome);
 					contato.setContato(novoTelefone);
+					contato.setEmail(novoEmail);
+					contato.setContatoComercial(novoContatoComercial);
 
 					agenda.alterarContato(contatoAserAtualizado, contato);
 					System.out.println("---------------------");
 					break;
 				case 4:
-					System.out.println("digite o código do contato: ");
-					agenda.excluirContato(Integer.parseInt(leitor.nextLine()));
-					System.out.println("---------------------");
+					while (true) {
+						try {
+							System.out.println("digite o código do contato: ");
+							agenda.excluirContato(Integer.parseInt(leitor.nextLine()));
+							System.out.println("contato excluido");
+							System.out.println("---------------------");
+							break;
+						} catch (Exception e) {
+							System.out.println("entrada inválida! Tenten novamente");
+						}
+					}
 					break;
 				case 5:
 					System.out.println("digite o mês dos aniversariantes: ");
@@ -81,7 +114,12 @@ public class AgendaMain {
 				case 6:
 					agenda.listarContatos();
 					break;
+
 				case 7:
+					agenda.excluirTodosContatos();
+					break;
+				case 8:
+					System.out.println("Sistema encerrado!");
 					continua = false;
 					leitor.close();
 					break;

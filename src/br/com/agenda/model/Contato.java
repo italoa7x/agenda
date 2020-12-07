@@ -1,20 +1,39 @@
 package br.com.agenda.model;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Contato {
 	private String contato;
 	private DataNascimento dataNascimento;
 	private String nome;
+	private String email;
+	private String contatoComercial;
 
-	public Contato(String nome, String contato, DataNascimento dataNascimento) throws ParseException {
+	public Contato(String nome, String contato, String contatoComercial, String email, DataNascimento dataNascimento)
+			throws ParseException {
 		super();
+		this.contatoComercial = contatoComercial;
+		this.email = email;
 		this.nome = nome;
 		this.contato = contato;
 		// converte a data passada em String pra um Date
 		this.dataNascimento = dataNascimento;
+	}
+
+	public String getContatoComercial() {
+		return contatoComercial;
+	}
+
+	public void setContatoComercial(String contatoComercial) {
+		this.contatoComercial = contatoComercial;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Contato() {
@@ -78,7 +97,8 @@ public class Contato {
 
 	@Override
 	public String toString() {
-		return "Nome: " + this.nome + "\nContato: " + contato + "\nData de nascimento: " + dataNascimento.getDia() + "/"
+		return "Nome: " + this.nome + "\nContato: " + contato + "\nContato comercial: " + this.contatoComercial
+				+ "\nE-mail: " + this.email + "\nData de nascimento: " + dataNascimento.getDia() + "/"
 				+ dataNascimento.getMes() + "/" + dataNascimento.getAno();
 	}
 

@@ -1,8 +1,5 @@
 package br.com.agenda.model;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +42,9 @@ public class Agenda {
 	}
 
 	public void listarContatos() {
+		if(this.contados.isEmpty()) {
+			System.out.println("não há contatos para exibir. Agenda vazia.");
+		}
 		// itera sobre a lista de contatos e os exibe
 		System.out.println("---------------------------------");
 		this.contados.forEach((k, v) -> {
@@ -78,6 +78,15 @@ public class Agenda {
 		}
 		// busca o contato pra excluir
 		this.contados.remove(codigoContato);
+	}
+
+	public void excluirTodosContatos() {
+		if(this.contados.isEmpty()) {
+			System.out.println("não há contatos para excluir.");
+			return;
+		}
+		this.contados.clear();
+		System.out.println("todos os contatos foram excluidos");
 	}
 
 	// lista os contatos aniversariantes em um determinado mês
